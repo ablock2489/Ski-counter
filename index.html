@@ -23,14 +23,14 @@
   <p id="currentStreak" style="font-size: 18px; font-weight: bold;"></p>
   <p id="warning" style="color: red; font-weight: bold;"></p>
 
-  <!--<div id="monthList" style="max-height: 300px; overflow-y: auto; margin-top: 10px;"></div>
-  //<button onclick="saveLog()">💾 Save Log</button>
+  <!--
+  <div id="monthList" style="max-height: 300px; overflow-y: auto; margin-top: 10px;"></div>
+  <button onclick="saveLog()">💾 Save Log</button>
   -->
-</div>
 
 <script>
   const storageKey = "skiMonthsLogged";
-  const totalPossible = 114; // Jan 2016 to June 2025
+  const totalPossible = 114;
   const today = new Date();
   const currentYear = today.getFullYear();
   const currentMonth = today.getMonth();
@@ -52,34 +52,7 @@
   function formatMonth(year, month) {
     return `${year}-${String(month + 1).padStart(2, "0")}`;
   }
-/*
-  function generateMonthList() {
-    const container = document.getElementById("monthList");
-    container.innerHTML = "";
-    for (let y = 2016; y <= 2025; y++) {
-      const endMonth = y === 2025 ? 5 : 11;
-      for (let m = 0; m <= endMonth; m++) {
-        const key = formatMonth(y, m);
-        const checked = skiLog.includes(key) ? "checked" : "";
-        container.innerHTML += `
-          <label style="display: inline-block; width: 120px; margin: 2px;">
-            <input type="checkbox" value="${key}" ${checked}> ${key}
-          </label>
-        `;
-      }
-    }
-  }
 
-  function saveLog() {
-    const checkboxes = document.querySelectorAll("#monthList input[type='checkbox']");
-    skiLog = [];
-    checkboxes.forEach(cb => {
-      if (cb.checked) skiLog.push(cb.value);
-    });
-    localStorage.setItem(storageKey, JSON.stringify(skiLog));
-    updateCounter();
-  }
-*/
   function updateCounter() {
     skiLog.sort();
     const uniqueMonths = new Set(skiLog);
@@ -112,7 +85,6 @@
       : "⚠️ You haven't skied this month yet — go before your streak resets!";
   }
 
-  generateMonthList();
   updateCounter();
 </script>
 </body>

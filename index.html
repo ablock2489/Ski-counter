@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Ski Counter</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f0f0f0;
+    }
+    .box {
+      border: 2px solid black;
+      padding: 20px;
+      border-radius: 10px;
+      background: white;
+      max-width: 550px;
+      margin: auto;
+    }
+  </style>
+</head>
+<body>
+<div class="box">
+  <h1 id="monthCounter" style="font-size: 32px; font-weight: bold; margin-bottom: 10px;">
+    🧮 Ski Counter: 114 months (Jan 2016 → Jun 2025)
+  </h1>
+
+  <h2 id="skiSummary" style="font-size: 22px; margin-top: 0;"></h2>
+  <p id="currentStreak" style="font-size: 18px; font-weight: bold;"></p>
+  <p id="warning" style="color: red; font-weight: bold;"></p>
+
+  <div id="monthList" style="max-height: 300px; overflow-y: auto; margin-top: 10px;"></div>
+  <button onclick="saveLog()">💾 Save Log</button>
+</div>
+
+<script>
+  const storageKey = "skiMonthsLogged";
+  const totalPossible = 114; // Jan 2016 to June 2025
+  const today = new Date();
+  const currentYear = today.getFullYear();
+  const currentMonth = today.getMonth();
+  const thisMonthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, "0")}`;
+
+  if (!localStorage.getItem(storageKey)) {
+    let prefill = [];
+    for (let y = 2016; y <= 2025; y++) {
+      for (let m = 0; m < 12; m++) {
+        if (y === 2025 && m > 5) break;
+        prefill.push(`${y}-${String(m + 1).padStart(2, "0")}`);
+      }
+    }
+    localStorage.setItem(storageKey, JSON.stringify(prefill));
+  }
+
+  let skiLog = JSON.parse(localStorage.getItem(storageKey));
+
+  function formatMonth(year, month) {
+    return `${year}-${String(month + 1).padStart(2, "0")}`;
+  }
+
+  function generateMonthList() {
+    const container = document.getElementById("monthList");
+    container.innerHTML = "";
+    for (let y = 2016; y <= 2025; y++) {
+      const endMonth = y === 2025 ? 5 : 11;
+      for (let m = 0; m <= endMonth; m++) {
+        const key = formatMonth(y, m);
+        const checked = skiLog.includes(key) ? "checked" : "";
+        container.innerHTML += `
+          <label style="display: inline-block; width: 120px; margin: 2px;">
+            <input type="checkbox" value="${key}" ${checked}> ${key}
+          </label>
+        `;
+      }
+    }
+  }
+
+  function saveLog() {
+    const checkboxes = document.querySelectorAll("#monthList input[type='checkbox']");
+    skiLog = [];
+    checkboxes.forEach(cb => {
+      if (cb.checked) skiLog.push(cb.value);
+    });
+    localStorage.setItem(storageKey, JSON.stringify(skiLog));
+    updateCounter();
+  }
+
+  function updateCounter() {
+    skiLog.sort();
+    const uniqueMonths = new Set(skiLog);
+    const totalSkied = uniqueMonths.size;
+
+    let streak = 0;
+    let d = new Date(2016, 0, 1);
+    const now = new Date(2025, 5, 1);
+    while (d <= now) {
+      const key = formatMonth(d.getFullYear(), d.getMonth());
+      if (skiLog.includes(key)) {
+        streak++;
+        d.setMonth(d.getMonth() + 1);
+      } else {
+        break;
+      }
+    }
+
+    document.getElementById("monthCounter").textContent =
+      `🧮 Ski Counter: ${totalPossible} months (Jan 2016 → Jun 2025)`;
+
+    document.getElementById("skiSummary").textContent =
+      `✅ Skied: ${totalSkied} / ${totalPossible} months`;
+
+    document.getElementById("currentStreak").textContent =
+      `🔥 Current Streak: ${streak} consecutive months`;
+
+    document.getElementById("warning").textContent = skiLog.includes(thisMonthKey)
+      ? ""
+      : "⚠️ You haven't skied this month yet — go before your streak resets!";
+  }
+
+  generateMonthList();
+  updateCounter();
+</script>
+</body>
+</html>

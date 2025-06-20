@@ -58,7 +58,7 @@
   function formatMonth(year, month) {
     return `${year}-${String(month + 1).padStart(2, "0")}`;
   }
-
+/*
   function generateMonthList() {
     const container = document.getElementById("monthList");
     container.innerHTML = "";
@@ -85,7 +85,7 @@
     localStorage.setItem(storageKey, JSON.stringify(skiLog));
     updateCounter();
   }
-
+*/
   function updateCounter() {
     skiLog.sort();
     const uniqueMonths = new Set(skiLog);

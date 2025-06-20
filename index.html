@@ -12,17 +12,17 @@
   </style>
 </head>
 
-<!-- 🔶 CHANGED: applied style directly to <body> instead of wrapping it in a .box div -->
-<body style="border: 2px solid black; padding: 20px; border-radius: 10px; background: white; max-width: 550px; margin: auto;">
+<body style="border: 2px solid black; padding: 20px; border-radius: 10px; background: transparent; display: flex; flex-direction: column; align-items: center; font-family: Arial, sans-serif;">
 
-  <h1 id="monthCounter" style="font-size: 32px; font-weight: bold; margin-bottom: 10px;">
-    🧮 Ski Counter: 114 months (Jan 2016 → Jun 2025)
+  <h1 id="monthCounter" style="font-size: 32px; font-weight: bold; text-align: center;">
+    🧮 Ski Counter: 114 months<br>(Jan 2016 → Jun 2025)
   </h1>
 
-  <h2 id="skiSummary" style="font-size: 22px; margin-top: 0;"></h2>
-  <p id="currentStreak" style="font-size: 18px; font-weight: bold;"></p>
-  <p id="warning" style="color: red; font-weight: bold;"></p>
+  <h2 id="skiSummary" style="font-size: 22px; text-align: center; margin: 10px 0;"></h2>
+  <p id="currentStreak" style="font-size: 18px; font-weight: bold; text-align: center;"></p>
+  <p id="warning" style="color: red; font-weight: bold; text-align: center;"></p>
 
+  <!-- Elements below are commented out -->
   <!--
   <div id="monthList" style="max-height: 300px; overflow-y: auto; margin-top: 10px;"></div>
   <button onclick="saveLog()">💾 Save Log</button>
@@ -72,7 +72,7 @@
     }
 
     document.getElementById("monthCounter").textContent =
-      `🧮 Ski Counter: ${totalPossible} months (Jan 2016 → Jun 2025)`;
+      `🧮 Ski Counter: ${totalPossible} months\n(Jan 2016 → Jun 2025)`;
 
     document.getElementById("skiSummary").textContent =
       `✅ Skied: ${totalSkied} / ${totalPossible} months`;
